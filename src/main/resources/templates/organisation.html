@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organiser un événement – Eventify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f0723 0%, #1a0b3d 50%, #2d1b69 100%); }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="gradient-bg text-white min-h-screen">
+
+<!-- Navbar -->
+<nav class="relative z-50 px-6 lg:px-16 py-8 flex items-center justify-between backdrop-blur-xl bg-black/20 border-b border-white/10">
+    <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl font-black">E</div>
+        <span class="text-3xl font-bold">Eventify</span>
+    </div>
+    <div class="hidden lg:flex items-center gap-10 text-lg">
+        <a href="/" class="hover:text-purple-300 transition">Accueil</a>
+        <a href="/evenements" class="hover:text-purple-300 transition">Événements</a>
+        <a href="/organiser" class="text-purple-400 font-bold">Organiser</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="/login" class="px-7 py-3 rounded-full border border-purple-500 hover:bg-purple-500/10 font-medium transition">Connexion</a>
+        <a href="/dashboard" class="px-7 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 font-bold transition shadow-xl">Mon espace</a>
+    </div>
+</nav>
+
+<!-- Hero + Big CTA -->
+<section class="px-6 lg:px-16 pt-20 pb-32 text-center">
+    <div class="max-w-5xl mx-auto">
+        <h1 class="text-5xl lg:text-7xl font-black leading-tight mb-8">
+            Créez votre événement<br>
+            <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">en quelques clics</span>
+        </h1>
+        <p class="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
+            Mariage, anniversaire, conférence, soirée d’entreprise — tout est gratuit, personnalisable et sécurisé.
+        </p>
+
+        <!-- Big CTA Button -->
+        <button onclick="openModal()"
+                class="px-16 py-8 rounded-3xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 font-black text-2xl shadow-2xl transform hover:scale- <!-- scale -->105 transition duration-300">
+            Créer mon événement gratuitement
+        </button>
+
+        <p class="text-gray-400 mt-8">Aucune carte bancaire • Illimité • 100% gratuit</p>
+    </div>
+</section>
+
+<!-- MODAL : Création d'événement (Wizard) -->
+<div id="eventModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+    <div class="glass rounded-3xl shadow-2xl border border-white/20 w-full max-w-6xl max-h-[90vh] overflow-hidden">
+        <div class="p-8 border-b border-white/10 flex justify-between items-center">
+            <h2 class="text-3xl font-bold">Créer un nouvel événement</h2>
+            <button onclick="closeModal()" class="text-3xl hover:text-purple-400 transition">&times;</button>
+        </div>
+
+        <div class="flex flex-col lg:flex-row h-full">
+            <!-- Steps Sidebar -->
+            <div class="lg:w-80 bg-white/5 p-8 space-y-6 border-r border-white/10">
+                <div class="flex items-center gap-4 text-purple-400 font-bold text-lg">
+                    <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">1</div>
+                    Informations
+                </div>
+                <div class="flex items-center gap-4 text-gray-500">
+                    <div class="w-10 h-10 rounded-full border-2 border-gray-600 flex items-center justify-center">2</div>
+                    Design & Branding
+                </div>
+                <div class="flex items-center gap-4 text-gray-500">
+                    <div class="w-10 h-10 rounded-full border-2 border-gray-600 flex items-center justify-center">3</div>
+                    Invités & Tables
+                </div>
+                <div class="flex items-center gap-4 text-gray-500">
+                    <div class="w-10 h-10 rounded-full border-2 border-gray-600 flex items-center justify-center">4</div>
+                    Publication
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="flex-1 p-10 overflow-y-auto">
+                <form th:action="@{/api/organizer/events}" method="post" class="space-y-8">
+                    <!-- Étape 1 : Informations -->
+                    <div>
+                        <label class="block text-lg font-semibold mb-3">Nom de l'événement</label>
+                        <input type="text" name="title" required class="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none text-lg" placeholder="Mariage de Sarah & Youssef">
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label class="block text-lg font-semibold mb-3">Date & Heure</label>
+                                <input type="datetime-local" name="date" required class="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-lg font-semibold mb-3">Lieu</label>
+                                <input type="text" name="location" required class="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none" placeholder="Four Seasons, Casablanca">
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <label class="block text-lg font-semibold mb-3">Description</label>
+                            <textarea name="description" rows="4" class="w-full px-6 py-4 rounded-2xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none resize-none"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Boutons -->
+                    <div class="flex justify-end gap-6 pt-10">
+                        <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border border-white/30 hover:bg-white/10 font-bold transition">
+                            Annuler
+                        </button>
+                        <button type="submit" class="px-12 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 font-bold text-xl shadow-xl transition">
+                            Créer l'événement
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview en temps réel (comme RSVPIFY) -->
+            <div class="hidden lg:block w-96 bg-gradient-to-br from-emerald-900/80 to-purple-900/80 p-8">
+                <div class="bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl">
+                    <div class="h-64 bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                        <p class="text-4xl font-bold">Votre Logo</p>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-4">Mariage de Sarah & Youssef</h3>
+                        <p class="text-gray-300 mb-6">28 Mars 2026 • 19:00<br>Four Seasons, Casablanca</p>
+                        <button class="w-full py-4 bg-white text-black font-bold rounded-2xl hover:bg-gray-200 transition">
+                            RSVP
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-8 glass rounded-3xl p-6 text-center">
+                    <p class="text-3xl font-black">0</p>
+                    <p class="text-gray-400">invités inscrits</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('eventModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        document.getElementById('eventModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+</script>
+</body>
+</html>

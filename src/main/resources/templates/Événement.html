@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Événements au Maroc – Eventify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f0723 0%, #1a0b3d 50%, #2d1b69 100%); }
+    </style>
+</head>
+<body class="gradient-bg text-white min-h-screen">
+
+<!-- Navbar (identique à la home) -->
+<nav class="relative z-50 px-6 lg:px-16 py-8 flex items-center justify-between backdrop-blur-xl bg-black/20 border-b border-white/10">
+    <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl font-black">E</div>
+        <span class="text-3xl font-bold">Eventify</span>
+    </div>
+    <div class="hidden lg:flex items-center gap-10 text-lg">
+        <a href="/" class="hover:text-purple-300 transition">Accueil</a>
+        <a href="/evenements" class="text-purple-400 font-bold">Événements</a>
+        <a href="/organiser" class="hover:text-purple-300 transition">Organiser</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="/login" class="px-7 py-3 rounded-full border border-purple-500 hover:bg-purple-500/10 font-medium transition">Connexion</a>
+        <a href="/register" class="px-7 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 font-bold transition shadow-xl">S'inscrire</a>
+    </div>
+</nav>
+
+<!-- Hero + Search Bar -->
+<section class="px-6 lg:px-16 pt-20 pb-12">
+    <div class="max-w-7xl mx-auto text-center">
+        <h1 class="text-5xl lg:text-7xl font-black leading-tight mb-6">
+            Trouvez votre prochain<br>
+            <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">événement au Maroc</span>
+        </h1>
+        <p class="text-xl text-gray-300 mb-10">Concerts • Mariages • Conférences • Soirées • Festivals • Tout est là, et c’est gratuit !</p>
+
+        <!-- Search + Filters -->
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-4 border border-white/20 shadow-2xl">
+                <div class="flex flex-col lg:flex-row gap-4">
+                    <div class="flex-1 relative">
+                        <i class="fas fa-search absolute left-5 top-5 text-purple-400"></i>
+                        <input type="text" placeholder="Rechercher un événement, lieu, organisateur..."
+                               class="w-full pl-14 pr-6 py-5 bg-transparent text-white placeholder-gray-400 text-lg focus:outline-none">
+                    </div>
+                    <select class="px-6 py-5 bg-white/10 rounded-2xl border border-white/20 focus:outline-none">
+                        <option>Toutes les villes</option>
+                        <option>Casablanca</option>
+                        <option>Marrakech</option>
+                        <option>Rabat</option>
+                        <option>Tanger</option>
+                        <option>Agadir</option>
+                    </select>
+                    <select class="px-6 py-5 bg-white/10 rounded-2xl border border-white/20 focus:outline-none">
+                        <option>Toutes les catégories</option>
+                        <option>Mariage</option>
+                        <option>Concert & Festival</option>
+                        <option>Conférence & Networking</option>
+                        <option>Soirée & Gala</option>
+                        <option>Sport</option>
+                    </select>
+                    <button class="px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold hover:opacity-90 transition">
+                        Rechercher
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Events Grid -->
+<section class="px-6 lg:px-16 pb-32">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <p class="text-gray-400">248 événements trouvés</p>
+            <select class="bg-white/10 backdrop-blur border border-white/20 rounded-xl px-6 py-3">
+                <option>Trier par : Date</option>
+                <option>Plus populaires</option>
+                <option>Proches de moi</option>
+            </select>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Event Card (repeat this block with Thymeleaf th:each in real project) -->
+            <div class="group relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800" alt="Mariage" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-purple-600/90 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">
+                        Mariage
+                    </div>
+                    <div class="absolute top-4 right-4 bg-black/60 backdrop-blur px-4 py-2 rounded-full text-sm">
+                        <i class="fas fa-heart text-red-500"></i> 842
+                    </div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-3">Mariage de Sarah & Youssef</h3>
+                    <div class="space-y-3 text-gray-300">
+                        <p><i class="fas fa-calendar mr-3 text-purple-400"></i>28 Mars 2026 • 19:00</p>
+                        <p><i class="fas fa-map-marker-alt mr-3 text-purple-400"></i>Four Seasons, Casablanca</p>
+                        <p><i class="fas fa-users mr-3 text-purple-400"></i>320 invités attendus</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-6">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full border-2 border-purple-500" alt="">
+                        <div>
+                            <p class="font-medium">Organisé par Amina</p>
+                            <p class="text-sm text-gray-400">2.4k événements créés</p>
+                        </div>
+                    </div>
+                    <button class="mt-6 w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold hover:opacity-90 transition">
+                        Voir & Réserver ma place
+                    </button>
+                </div>
+            </div>
+
+            <!-- Another card example -->
+            <div class="group relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800" alt="Concert" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-pink-600/90 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">
+                        Concert
+                    </div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-3">Festival Mawazine 2026</h3>
+                    <div class="space-y-3 text-gray-300">
+                        <p><i class="fas fa-calendar mr-3 text-purple-400"></i>15-23 Juin 2026</p>
+                        <p><i class="fas fa-map-marker-alt mr-3 text-purple-400"></i>Rabat</p>
+                        <p><i class="fas fa-users mr-3 text-purple-400"></i>150 000+ participants</p>
+                    </div>
+                    <button class="mt-10 w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold hover:opacity-90 transition">
+                        Places gratuites disponibles
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add more cards here... -->
+            <!-- You can duplicate 6–9 cards for demo -->
+        </div>
+
+        <div class="text-center mt-16">
+            <button class="px-12 py-5 rounded-2xl bg-white/10 backdrop-blur border border-white/30 hover:bg-white/20 font-bold text-lg transition">
+                Charger plus d'événements
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-black/30 backdrop-blur border-t border-white/10 px-6 lg:px-16 py-12">
+    <div class="max-w-7xl mx-auto text-center text-gray-400">
+        <p class="text-2xl font-bold text-white mb-2">Eventify</p>
+        <p>© 2025 • 100% gratuit • Créé avec passion au Maroc</p>
+    </div>
+</footer>
+</body>
+</html>

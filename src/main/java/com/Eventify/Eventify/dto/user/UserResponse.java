@@ -1,9 +1,10 @@
-package com.Eventify.Eventify.dto;
+package com.Eventify.Eventify.dto.user;
 
 import lombok.Data;
 
 @Data
 public class UserResponse {
+
     private String id;
     private String name;
     private String email;

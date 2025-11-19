@@ -1,7 +1,7 @@
 package com.Eventify.Eventify.Controller.user;
 
-import com.Eventify.Eventify.dto.UpdateUserRequest;
-import com.Eventify.Eventify.dto.UserResponse;
+import com.Eventify.Eventify.dto.user.UpdateUserRequest;
+import com.Eventify.Eventify.dto.user.UserResponse;
 import com.Eventify.Eventify.model.User;
 import com.Eventify.Eventify.service.UserService;
 import org.springframework.web.bind.annotation.*;

@@ -1,12 +1,14 @@
 package com.Eventify.Eventify.Controller.admin;
 
 
-import com.Eventify.Eventify.dto.UpdateRoleRequest;
-import com.Eventify.Eventify.dto.UpdateUserRequest;
-import com.Eventify.Eventify.dto.UserResponse;
+import com.Eventify.Eventify.dto.user.UpdateRoleRequest;
+import com.Eventify.Eventify.dto.user.UpdateUserRequest;
+import com.Eventify.Eventify.dto.user.UserResponse;
 import com.Eventify.Eventify.enums.Role;
 import com.Eventify.Eventify.model.User;
+import com.Eventify.Eventify.service.EventService;
 import com.Eventify.Eventify.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +19,11 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final UserService userService;
+    private final EventService eventService;
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, EventService eventService) {
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/users")
@@ -37,7 +41,6 @@ public class AdminController {
         return toResponse(updated);
     }
 
-    // تعديل معلومات المستخدم (الاسم والإيميل)
     @PutMapping("/users/{id}")
     public UserResponse updateUser(@PathVariable String id, @RequestBody UpdateUserRequest dto) {
         User updated = userService.updateUser(id, dto);
@@ -47,6 +50,12 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable String id) {
+        eventService.deleteEvent(id);
+        return ResponseEntity.ok("Event deleted by admin");
     }
 
     private UserResponse toResponse(User u) {

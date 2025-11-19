@@ -1,22 +1,16 @@
-package com.Eventify.Eventify.model;
+package com.Eventify.Eventify.dto.event;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Data
-@Document("events")
-public class Event {
+public class EventResponse {
 
-    @Id
     private String id;
-
     private String title;
     private String description;
     private String location;
-
     private LocalDateTime dateTime;
     private int capacity;
 

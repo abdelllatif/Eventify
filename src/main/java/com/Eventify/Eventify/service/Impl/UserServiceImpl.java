@@ -1,7 +1,7 @@
 package com.Eventify.Eventify.service.Impl;
 
-import com.Eventify.Eventify.dto.UserRegistrationRequest;
-import com.Eventify.Eventify.dto.UpdateUserRequest;
+import com.Eventify.Eventify.dto.user.UserRegistrationRequest;
+import com.Eventify.Eventify.dto.user.UpdateUserRequest;
 import com.Eventify.Eventify.enums.Role;
 import com.Eventify.Eventify.model.User;
 import com.Eventify.Eventify.exception.UserNotFoundException;
@@ -52,15 +52,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(String id, UpdateUserRequest dto) {
         User user = getUserById(id);
+        if(user.getId() == null){
+            throw new UserNotFoundException("User not found with id " + id);
+        }
+        userRepository.findByEmail(dto.getEmail())
+                .filter(existingUser -> !existingUser.getId().equals(id))
+                .ifPresent(existingUser -> {
+                    throw new UsernameAlreadyExistsException(
+                            "Email already exists: " + dto.getEmail()
+                    );
+                });
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         return userRepository.save(user);
     }
 
+
     @Override
     public User updateRole(String id, Role role) {
         User user = getUserById(id);
-        user.setRole(role); // enum ensures valid role
+        if(user.getId() == null){
+            throw new UserNotFoundException("User not found with id " + id);
+        }
+        user.setRole(role);
         return userRepository.save(user);
     }
 

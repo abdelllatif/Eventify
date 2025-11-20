@@ -1,4 +1,4 @@
-package com.Eventify.Eventify.service.Impl;
+package com.Eventify.Eventify.service.impl;
 
 import com.Eventify.Eventify.dto.user.UserRegistrationRequest;
 import com.Eventify.Eventify.dto.user.UpdateUserRequest;

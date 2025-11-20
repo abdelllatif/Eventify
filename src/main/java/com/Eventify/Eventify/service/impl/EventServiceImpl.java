@@ -1,4 +1,4 @@
-package com.Eventify.Eventify.service.Impl;
+package com.Eventify.Eventify.service.impl;
 
 import com.Eventify.Eventify.dto.event.EventRequest;
 import com.Eventify.Eventify.dto.event.EventResponse;

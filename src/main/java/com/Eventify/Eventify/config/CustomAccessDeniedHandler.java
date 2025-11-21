@@ -6,6 +6,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
@@ -20,13 +22,16 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");
 
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
         response.getWriter().write("""
                 {
+                  "timestamp": "%s",
                   "status": 403,
                   "error": "Forbidden",
                   "message": "You do not have permission",
                   "path": "%s"
                 }
-                """.formatted(request.getRequestURI()));
+                """.formatted(timestamp, request.getRequestURI()));
     }
 }

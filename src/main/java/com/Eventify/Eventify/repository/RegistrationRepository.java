@@ -19,6 +19,8 @@ public interface RegistrationRepository extends MongoRepository<Registration, St
 
     boolean existsByUserIdAndEventId(String userId, String eventId);
 
+
+
     // ADMIN — supprimer toutes les inscriptions liées à un événement
     void deleteByEventId(String eventId);
     long countByEventId(String eventId);

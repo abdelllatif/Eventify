@@ -54,27 +54,14 @@ public class OrganizerController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/events/{eventId}/register")
-    public ResponseEntity<RegistrationResponse> registerToEvent(
-            Principal principal,
-            @PathVariable("eventId") String eventId
+    @GetMapping("/events/{eventId}/participants")
+    public ResponseEntity<List<RegistrationResponse>> getEventParticipants(
+            @PathVariable String eventId,
+            Authentication authentication
     ) {
-        UserResponse current = userService.getByEmail(principal.getName());
-
-        RegistrationRequest req = new RegistrationRequest();
-        req.setUserId(current.getId());
-        req.setEventId(eventId);
-        req.setStatus("PENDING");
-
-        RegistrationResponse resp = registrationService.registerToEvent(req);
-        return ResponseEntity.status(201).body(resp);
+        String organizerId = authentication.getName();
+        List<RegistrationResponse> participants = registrationService.getEventParticipants(eventId, organizerId);
+        return ResponseEntity.ok(participants);
     }
 
-
-    @GetMapping("/registrations")
-    public ResponseEntity<List<RegistrationResponse>> getMyRegistrations(Principal principal) {
-        UserResponse current = userService.getByEmail(principal.getName());
-        List<RegistrationResponse> registrations = registrationService.getRegistrationsByUser(current.getId());
-        return ResponseEntity.ok(registrations);
-    }
 }

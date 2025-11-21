@@ -6,12 +6,14 @@ import com.Eventify.Eventify.enums.RegistrationStatus;
 import com.Eventify.Eventify.exception.EventNotFoundException;
 import com.Eventify.Eventify.exception.UnauthorizedActionException;
 import com.Eventify.Eventify.mapper.RegistrationMapper;
+import com.Eventify.Eventify.exception.EntityNotFoundException;
 import com.Eventify.Eventify.model.Event;
 import com.Eventify.Eventify.model.Registration;
 import com.Eventify.Eventify.repository.EventRepository;
 import com.Eventify.Eventify.repository.RegistrationRepository;
 import com.Eventify.Eventify.service.RegistrationService;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,4 +73,34 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void deleteRegistrationsByEvent(String eventId) {
         registrationRepository.deleteByEventId(eventId);
     }
+
+    // In RegistrationServiceImpl.java
+
+    @Override
+    public void cancelRegistration(String registrationId, String userId) {
+        Registration registration = registrationRepository.findById(registrationId)
+                .orElseThrow(() -> new EntityNotFoundException("Registration not found with id: " + registrationId));
+
+        if (!registration.getUserId().equals(userId)) {
+            throw new UnauthorizedActionException("User is not authorized to cancel this registration.");
+        }
+
+        registrationRepository.delete(registration);
+    }
+
+
+    @Override
+    public List<RegistrationResponse> getEventParticipants(String eventId, String organizerId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException("Event not found with id: " + eventId));
+
+        if (!event.getOrganizerId().equals(organizerId)) {
+            throw new UnauthorizedActionException("Only the event organizer can view participants.");
+        }
+
+        return registrationRepository.findByEventId(eventId).stream()
+                .map(registrationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

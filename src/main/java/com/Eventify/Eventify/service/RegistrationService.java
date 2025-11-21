@@ -12,6 +12,8 @@ public interface RegistrationService {
 
     RegistrationResponse createRegistration(RegistrationRequest request, String userId);
     List<RegistrationResponse> getRegistrationsByEvent(String eventId);
-
+    void cancelRegistration(String registrationId, String userId);
     void deleteRegistrationsByEvent(String eventId);
+
+    List<RegistrationResponse> getEventParticipants(String eventId, String organizerId);
 }

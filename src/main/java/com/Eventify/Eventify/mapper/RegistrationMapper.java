@@ -12,5 +12,5 @@ public interface RegistrationMapper {
 
     Registration toEntity(RegistrationRequest dto);
 
-    RegistrationResponse toDto(Registration registration); // ⚡ from toResponse -> toDto
+    RegistrationResponse toDto(Registration registration);
 }

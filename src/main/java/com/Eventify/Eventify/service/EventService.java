@@ -2,18 +2,16 @@ package com.Eventify.Eventify.service;
 
 import com.Eventify.Eventify.dto.event.EventRequest;
 import com.Eventify.Eventify.dto.event.EventResponse;
+
 import java.util.List;
 
 public interface EventService {
 
-    // USER
     List<EventResponse> getAllEvents();
 
-    // ORGANIZER
-    EventResponse createEvent(EventRequest dto, String organizerId);
-    EventResponse updateEvent(String eventId, EventRequest dto, String organizerId);
-    void deleteEventByOrganizer(String eventId, String organizerId);
+    EventResponse createEvent(EventRequest dto, Long organizerId);
+    EventResponse updateEvent(Long eventId, EventRequest dto, Long organizerId);
+    void deleteEventByOrganizer(Long eventId, Long organizerId);
 
-    // ADMIN
-    void deleteEventByAdmin(String eventId);
+    void deleteEventByAdmin(Long eventId);
 }

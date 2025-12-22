@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 @Data
 public class RegistrationResponse {
 
-    private String id;
+    private Long id;
 
-    private String userId;
-    private String eventId;
+    private Long userId;
+    private Long eventId;
 
     private String status;
 

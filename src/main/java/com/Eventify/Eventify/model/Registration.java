@@ -1,23 +1,25 @@
 package com.Eventify.Eventify.model;
 
 import com.Eventify.Eventify.enums.RegistrationStatus;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Data
-@Document("registrations")
+@Entity
+@Table(name = "registrations")
 public class Registration {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String userId;
-    private String eventId;
+    private Long userId;
+    private Long eventId;
 
+    @Enumerated(EnumType.STRING)
     private RegistrationStatus status;
 
-    private LocalDateTime registeredAt;
+    private LocalDateTime registeredAt=LocalDateTime.now();
 }

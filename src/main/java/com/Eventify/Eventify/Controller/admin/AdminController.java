@@ -31,7 +31,7 @@ public class AdminController {
 
     @PutMapping("/users/{id}/role")
     public ResponseEntity<UserResponse> updateUserRole(
-            @PathVariable("id") String id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody UpdateRoleRequest dto
     ) {
         UserResponse updated = userService.updateRole(id, dto);
@@ -40,7 +40,7 @@ public class AdminController {
 
 
     @DeleteMapping("/events/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteEvent(@PathVariable("id") Long id) {
         eventService.deleteEventByAdmin(id);
         return ResponseEntity.noContent().build();
     }

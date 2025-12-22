@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
-
     // ===================== REGISTER ======================
     @Override
     public UserResponse registerUser(UserRegistrationRequest dto) {
@@ -40,52 +39,37 @@ public class UserServiceImpl implements UserService {
             throw new UsernameAlreadyExistsException("Email already exists: " + dto.getEmail());
         }
 
-        // map DTO to entity
         User user = userMapper.toEntity(dto);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRole(Role.ROLE_USER); // default role
 
-        // save first -> MongoDB generates ObjectId
         User savedUser = userRepository.save(user);
-
-        // now map saved entity to DTO
         return userMapper.toDto(savedUser);
     }
 
-
-
     // ===================== GET USER BY ID ======================
     @Override
-    public UserResponse getUserById(String id) {
-
+    public UserResponse getById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found with id " + id));
-
         return userMapper.toDto(user);
     }
-
 
     // ===================== GET ALL USERS ======================
     @Override
     public List<UserResponse> getAllUsers() {
-
         return userRepository.findAll().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-
-    // ===================== UPDATE USER ======================
     @Override
-    public UserResponse updateUser(String id, UpdateUserRequest dto) {
-
+    public UserResponse updateUser(Long id, UpdateUserRequest dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found with id " + id));
-
-        // check email uniqueness
-        userRepository.findByEmail(dto.getEmail())
+                userRepository.findByEmail(dto.getEmail())
                 .filter(existingUser -> !existingUser.getId().equals(id))
                 .ifPresent(existing -> {
                     throw new UsernameAlreadyExistsException("Email already exists: " + dto.getEmail());
@@ -97,11 +81,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
-
-    // ===================== UPDATE ROLE ======================
     @Override
-    public UserResponse updateRole(String id, UpdateRoleRequest dto) {
-
+    public UserResponse updateRole(Long id, UpdateRoleRequest dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found with id " + id));
@@ -112,27 +93,19 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
-
-    // ===================== DELETE USER ======================
     @Override
-    public void deleteUser(String id) {
-
+    public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("Cannot delete. User not found with id " + id);
         }
-
         userRepository.deleteById(id);
     }
 
-
-    // ===================== GET USER BY EMAIL ======================
     @Override
     public UserResponse getByEmail(String email) {
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found with email " + email));
-
         return userMapper.toDto(user);
     }
 }

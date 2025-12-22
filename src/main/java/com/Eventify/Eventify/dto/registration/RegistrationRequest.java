@@ -8,11 +8,11 @@ import lombok.Data;
 public class RegistrationRequest {
 
     @NotBlank(message = "User ID must not be blank")
-    private String userId;
+    private Long userId;
 
     @NotBlank(message = "Event ID must not be blank")
-    private String eventId;
+    private Long eventId;
 
     @NotNull(message = "Status must not be null")
-    private String status; // ex: "REGISTERED", "CANCELLED", etc.
+    private String status;
 }

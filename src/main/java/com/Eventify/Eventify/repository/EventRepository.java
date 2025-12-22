@@ -1,17 +1,15 @@
 package com.Eventify.Eventify.repository;
 
 import com.Eventify.Eventify.model.Event;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EventRepository extends MongoRepository<Event, String> {
+public interface EventRepository extends JpaRepository<Event, Long> {
 
-    // Organizer — liste des événements créés par un organisateur
-    List<Event> findByOrganizerId(String organizerId);
+    List<Event> findByOrganizerId(Long organizerId);
 
-    // Recherche avancée (optionnel mais utile)
     List<Event> findByTitleContainingIgnoreCase(String title);
 
     List<Event> findByLocationContainingIgnoreCase(String location);

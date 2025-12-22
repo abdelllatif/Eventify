@@ -31,19 +31,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponse createEvent(EventRequest dto, String organizerId) {
+    public EventResponse createEvent(EventRequest dto, Long organizerId) {
         Event event = eventMapper.toEntity(dto);
         event.setOrganizerId(organizerId);
         return eventMapper.toDto(eventRepository.save(event));
     }
 
     @Override
-    public EventResponse updateEvent(String eventId, EventRequest dto, String organizerId) {
+    public EventResponse updateEvent(Long eventId, EventRequest dto, Long organizerId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found with id " + eventId));
 
         if (!event.getOrganizerId().equals(organizerId)) {
-            throw new RuntimeException("Unauthorized to update this event"); // can create UnauthorizedActionException
+            throw new RuntimeException("Unauthorized to update this event");
         }
 
         event.setTitle(dto.getTitle());
@@ -56,21 +56,23 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void deleteEventByOrganizer(String eventId, String organizerId) {
+    public void deleteEventByOrganizer(Long eventId, Long organizerId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found with id " + eventId));
 
         if (!event.getOrganizerId().equals(organizerId)) {
             throw new RuntimeException("Unauthorized to delete this event");
         }
+
         eventRepository.deleteById(eventId);
     }
 
     @Override
-    public void deleteEventByAdmin(String eventId) {
+    public void deleteEventByAdmin(Long eventId) {
         if (!eventRepository.existsById(eventId)) {
             throw new EventNotFoundException("Event not found with id " + eventId);
         }
+
         eventRepository.deleteById(eventId);
     }
 }

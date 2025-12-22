@@ -1,17 +1,18 @@
 package com.Eventify.Eventify.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Data
-@Document("events")
+@Entity
+@Table(name = "events")
 public class Event {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String title;
     private String description;
@@ -20,5 +21,5 @@ public class Event {
     private LocalDateTime dateTime;
     private int capacity;
 
-    private String organizerId;
+    private Long organizerId;
 }

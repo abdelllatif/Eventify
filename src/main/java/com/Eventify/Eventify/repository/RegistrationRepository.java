@@ -1,28 +1,22 @@
 package com.Eventify.Eventify.repository;
 
 import com.Eventify.Eventify.model.Registration;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface RegistrationRepository extends MongoRepository<Registration, String> {
+public interface RegistrationRepository extends JpaRepository<Registration, Long> {
 
-    // USER — récupérer inscriptions d’un user
-    List<Registration> findByUserId(String userId);
+    List<Registration> findByUserId(Long userId);
 
-    // ORGANIZER / ADMIN — récupérer inscriptions d’un event
-    List<Registration> findByEventId(String eventId);
+    List<Registration> findByEventId(Long eventId);
 
-    // USER — vérifier si déjà inscrit
-    Optional<Registration> findByUserIdAndEventId(String userId, String eventId);
+    Optional<Registration> findByUserIdAndEventId(Long userId, Long eventId);
 
-    boolean existsByUserIdAndEventId(String userId, String eventId);
+    boolean existsByUserIdAndEventId(Long userId, Long eventId);
 
+    void deleteByEventId(Long eventId);
 
-
-    // ADMIN — supprimer toutes les inscriptions liées à un événement
-    void deleteByEventId(String eventId);
-    long countByEventId(String eventId);
-
+    long countByEventId(Long eventId);
 }

@@ -5,15 +5,14 @@ import com.Eventify.Eventify.dto.registration.RegistrationResponse;
 import com.Eventify.Eventify.enums.RegistrationStatus;
 import com.Eventify.Eventify.exception.EventNotFoundException;
 import com.Eventify.Eventify.exception.UnauthorizedActionException;
-import com.Eventify.Eventify.mapper.RegistrationMapper;
 import com.Eventify.Eventify.exception.EntityNotFoundException;
+import com.Eventify.Eventify.mapper.RegistrationMapper;
 import com.Eventify.Eventify.model.Event;
 import com.Eventify.Eventify.model.Registration;
 import com.Eventify.Eventify.repository.EventRepository;
 import com.Eventify.Eventify.repository.RegistrationRepository;
 import com.Eventify.Eventify.service.RegistrationService;
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,33 +50,29 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public List<RegistrationResponse> getRegistrationsByUser(String userId) {
+    public RegistrationResponse createRegistration(RegistrationRequest request, Long userId) {
+        request.setUserId(userId);
+        request.setStatus(RegistrationStatus.PENDING.name());
+        Registration registration = registrationMapper.toEntity(request);
+        return registrationMapper.toDto(registrationRepository.save(registration));
+    }
+
+    @Override
+    public List<RegistrationResponse> getRegistrationsByUser(Long userId) {
         return registrationRepository.findByUserId(userId).stream()
                 .map(registrationMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public RegistrationResponse createRegistration(RegistrationRequest request, String userId) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationResponse> getRegistrationsByEvent(String eventId) {
+    public List<RegistrationResponse> getRegistrationsByEvent(Long eventId) {
         return registrationRepository.findByEventId(eventId).stream()
                 .map(registrationMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteRegistrationsByEvent(String eventId) {
-        registrationRepository.deleteByEventId(eventId);
-    }
-
-    // In RegistrationServiceImpl.java
-
-    @Override
-    public void cancelRegistration(String registrationId, String userId) {
+    public void cancelRegistration(Long registrationId, Long userId) {
         Registration registration = registrationRepository.findById(registrationId)
                 .orElseThrow(() -> new EntityNotFoundException("Registration not found with id: " + registrationId));
 
@@ -88,9 +83,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         registrationRepository.delete(registration);
     }
 
+    @Override
+    public void deleteRegistrationsByEvent(Long eventId) {
+        registrationRepository.deleteByEventId(eventId);
+    }
 
     @Override
-    public List<RegistrationResponse> getEventParticipants(String eventId, String organizerId) {
+    public List<RegistrationResponse> getEventParticipants(Long eventId, Long organizerId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found with id: " + eventId));
 
@@ -102,5 +101,4 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .map(registrationMapper::toDto)
                 .collect(Collectors.toList());
     }
-
 }

@@ -11,15 +11,15 @@ public interface UserService {
 
     UserResponse registerUser(UserRegistrationRequest dto);
 
-    UserResponse getUserById(String id);
+    UserResponse getById(Long id);
 
     List<UserResponse> getAllUsers();
 
-    UserResponse updateUser(String id, UpdateUserRequest dto);
+    UserResponse updateUser(Long id, UpdateUserRequest dto);
 
-    UserResponse updateRole(String id, UpdateRoleRequest dto);
+    UserResponse updateRole(Long id, UpdateRoleRequest dto);
 
-    void deleteUser(String id);
+    void deleteUser(Long id);
 
     UserResponse getByEmail(String email);
 }

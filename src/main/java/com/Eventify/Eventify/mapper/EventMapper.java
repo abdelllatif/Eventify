@@ -12,5 +12,5 @@ public interface EventMapper {
 
     Event toEntity(EventRequest dto);
 
-    EventResponse toDto(Event event); // ⚡ from toResponse -> toDto
+    EventResponse toDto(Event event);
 }

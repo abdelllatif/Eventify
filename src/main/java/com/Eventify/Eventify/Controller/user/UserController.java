@@ -25,13 +25,11 @@ public class UserController {
         this.registrationService = registrationService;
     }
 
-
     @GetMapping("/profile")
     public ResponseEntity<UserResponse> getProfile(Principal principal) {
         UserResponse user = userService.getByEmail(principal.getName());
         return ResponseEntity.ok(user);
     }
-
 
     @PutMapping("/profile")
     public ResponseEntity<UserResponse> updateProfile(
@@ -44,38 +42,4 @@ public class UserController {
     }
 
 
-
-    @PostMapping("/events/{eventId}/register")
-    public ResponseEntity<RegistrationResponse> registerToEvent(
-            Principal principal,
-            @PathVariable("eventId") String eventId
-    ) {
-        UserResponse current = userService.getByEmail(principal.getName());
-
-        RegistrationRequest req = new RegistrationRequest();
-        req.setUserId(current.getId());
-        req.setEventId(eventId);
-        req.setStatus("PENDING");
-
-        RegistrationResponse resp = registrationService.registerToEvent(req);
-        return ResponseEntity.status(201).body(resp);
-    }
-
-
-    @GetMapping("/registrations")
-    public ResponseEntity<List<RegistrationResponse>> getMyRegistrations(Principal principal) {
-        UserResponse current = userService.getByEmail(principal.getName());
-        List<RegistrationResponse> registrations = registrationService.getRegistrationsByUser(current.getId());
-        return ResponseEntity.ok(registrations);
-    }
-    @DeleteMapping("/registrations/{registrationId}")
-    public ResponseEntity<Void> cancelRegistration(
-            Principal principal,
-            @PathVariable("registrationId") String registrationId
-    ) {
-        UserResponse current = userService.getByEmail(principal.getName());
-        registrationService.cancelRegistration(registrationId, current.getId());
-        return ResponseEntity.noContent().build();
-
-    }
 }
